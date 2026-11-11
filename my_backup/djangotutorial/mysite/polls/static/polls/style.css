@@ -1,0 +1,24 @@
+T1 {
+    color: green;
+}
+
+H2 {
+    color: green;
+}
+
+H3 {
+    color: green;
+}
+
+
+p {
+    color: green;
+}
+
+li a {
+    color: red
+}
+
+body {
+    background: black url("images/background.png") no-repeat;
+}
