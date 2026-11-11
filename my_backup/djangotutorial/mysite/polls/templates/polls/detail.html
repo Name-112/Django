@@ -25,6 +25,11 @@
 
 <a href="{% url 'polls:comment' question.id %}">Add a comment</a>
 
-
+<h2>Comments</h2>
+{% for comment in question.comment_set.all %}
+    <p><strong>{{ comment.owner.username }}</strong>: {{ comment.text }}</p>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
 
 

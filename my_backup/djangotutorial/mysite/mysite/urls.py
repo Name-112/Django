@@ -32,6 +32,7 @@ router.register(r"groups", views.GroupViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("polls/", include("polls.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),

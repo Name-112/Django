@@ -1,0 +1,9 @@
+<h1>Add a comment to: {{ question.question_text }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post comment</button>
+</form>
+
+<a href="{% url 'polls:detail' question.pk %}">Back to question</a>

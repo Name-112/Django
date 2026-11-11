@@ -104,6 +104,13 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     fields = ["text"]
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["question"] = get_object_or_404(
+            Question, pk=self.kwargs["question_id"]
+        )
+        return context
+
     def form_valid(self, form):
         form.instance.owner = self.request.user
         form.instance.question = get_object_or_404(

@@ -3,8 +3,48 @@ import datetime
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
+from django.contrib.auth.models import User
 
-from .models import Question
+from .models import Comment, Question
+
+
+class CommentCreateViewTests(TestCase):
+    def setUp(self):
+        self.question = create_question(question_text="Question.", days=-1)
+        self.url = reverse("polls:comment", args=(self.question.pk,))
+
+    def test_anonymous_user_is_redirected_to_login(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response, f"{reverse('login')}?next={self.url}"
+        )
+
+    def test_authenticated_user_can_post_and_view_comment(self):
+        user = User.objects.create_user(username="commenter", password="test-pass")
+        self.client.force_login(user)
+
+        response = self.client.post(self.url, {"text": "A useful comment."})
+
+        self.assertRedirects(
+            response, reverse("polls:detail", args=(self.question.pk,))
+        )
+        comment = Comment.objects.get()
+        self.assertEqual(comment.text, "A useful comment.")
+        self.assertEqual(comment.owner, user)
+        self.assertEqual(comment.question, self.question)
+        self.assertContains(
+            self.client.get(reverse("polls:detail", args=(self.question.pk,))),
+            "A useful comment.",
+        )
+
+    def test_comment_form_is_available_to_authenticated_user(self):
+        user = User.objects.create_user(username="commenter", password="test-pass")
+        self.client.force_login(user)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Post comment")
 
 class QuestionDetailViewTests(TestCase):
     def test_future_question(self):
