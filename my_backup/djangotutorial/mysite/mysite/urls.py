@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from rest_framework import routers
-from tutorial.quickstart import views
+from polls import views
 
 from django.contrib import admin
 from django.urls import include, path
@@ -36,4 +36,3 @@ urlpatterns = [
     path("", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
-
